@@ -17,12 +17,14 @@ if (isset($id_usr)) {
         user-scalable=no, shrink-to-fit=no"/>
 
         <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.css">
         <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"/>
         <link rel="stylesheet" href="/main.css" />
         <link rel="stylesheet" href=" departments.css">
 
         <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
+        <script src="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <script type="text/javascript" src=" ../common/factory.js"></script>
         <script type="text/javascript" src="departments.js"></script>
@@ -74,12 +76,12 @@ if (isset($id_usr)) {
                                         </form>
                                     </div>
                                     <div class="container form-container">
-                                        <table class="table" id="table-dep">
+                                        <table class="mb-0 table table-bordered text-center" id="table-dep">
                                             <thead>
-                                            <tr class="d-flex">
-                                                <th class="col-1" scope="col">#</th>
-                                                <th class="col-6" scope="col">Departamento</th>
-                                                <th class="col-4" scope="col">Acciones</th>
+                                            <tr>
+                                                <th data-sortable="true" scope="col">#</th>
+                                                <th data-sortable="true" scope="col">Departamento</th>
+                                                <th scope="col">Acciones</th>
                                             </tr>
                                             </thead>
                                         </table>

@@ -17,12 +17,14 @@ if (isset($id_usr)) {
         user-scalable=no, shrink-to-fit=no"/>
 
         <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.css">
         <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"/>
         <link rel="stylesheet" href="/main.css" />
         <link rel="stylesheet" href="employees.css" />
 
         <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
+        <script src="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <script type="text/javascript" src=" ../common/factory.js"></script>
         <script type="text/javascript" src="employees.js"></script>
@@ -65,16 +67,16 @@ if (isset($id_usr)) {
                             <div class="card-body">
                                 <div class="container">
                                 </div>
-                                <table class="mb-0 table table-bordered text-center" id="table-emp">
+                                <table class="mb-0 table table-bordered text-center" id="table-emp" >
                                     <thead>
-                                    <tr class="d-flex" style="text-align: justify">
-                                        <th scope="col">#</th>
-                                        <th class="col-2" scope="col">Estado</th>
-                                        <th class="col" scope="col">Puesto</th>
-                                        <th class="col-2" scope="col">Apellido paterno</th>
-                                        <th class="col-2" scope="col">Apellido materno</th>
-                                        <th class="col-2" scope="col">Nombre</th>
-                                        <th class="col-2" scope="col">Acciones</th>
+                                    <tr>
+                                        <th scope="col" data-sortable="true">#</th>
+                                        <th scope="col" data-sortable="true">Estado</th>
+                                        <th scope="col" data-sortable="true">Puesto</th>
+                                        <th scope="col" data-sortable="true">Apellido paterno</th>
+                                        <th scope="col" data-sortable="true">Apellido materno</th>
+                                        <th scope="col" data-sortable="true">Nombre</th>
+                                        <th scope="col" data-sortable="true">Acciones</th>
                                     </tr>
                                     </thead>
                                 </table>

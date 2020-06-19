@@ -106,6 +106,10 @@ class EmployeesDataAccess
 
             $insertion = $this->insertion($newArray, $paramsScholarship, 'sp_insert_scholarship');
 
+            $paramsScholarship = array('employeeId', 'elementarySchoolName', 'elementarySchoolAddress', 'elementarySchoolFrom', 'elementarySchoolTo', 'elementarySchoolDegree', 'juniorHighName', 'juniorHighAddress', 'juniorHighFrom', 'juniorHighTo', 'juniorHighDegree', 'highSchoolName', 'highSchoolAddress', 'highSchoolFrom', 'highSchoolTo', 'highSchoolDegree', 'professionalSchoolName', 'professionalSchoolTo', 'professionalSchoolFrom', 'professionalSchoolAddress', 'professionalSchoolDegree');
+
+            $insertion = $this->insertion($newArray, $paramsScholarship, 'sp_insert_scholarship');
+
             return $insertion->rowCount();
 
         } catch (PDOException $e) {
