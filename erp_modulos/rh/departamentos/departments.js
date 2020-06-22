@@ -29,7 +29,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     submit.addEventListener('click', event => {
         const form_data = new FormData(form)
-        const data = JSON.stringify(Object.fromEntries(form_data))
+        const data = Object.fromEntries(form_data)
+        data['positionIsSupervisor'] = data['positionIsSupervisor'] ? data['positionIsSupervisor'] : 0
 
         axios.post(`http://${window.location.hostname}/erp_modulos/rh/Api/departments`, data)
             .then(response => {
