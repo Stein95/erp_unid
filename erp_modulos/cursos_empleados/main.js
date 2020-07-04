@@ -4,7 +4,12 @@ $(document).ready(function () {
     $(".chosen-select").chosen({
         no_results_text: "Oops, no se encontraron resultados para: ",
         width: "100%",
+        max_selected_options: 7
     });
+
+    $(".chosen-select").bind("chosen:maxselected", function () { 
+        alert('Máximo 7 empleados por inserción, en honor al comandante');
+     }); 
 
     $("#newCourseEmployee").click(function () {
         obj = {
@@ -12,7 +17,13 @@ $(document).ready(function () {
         };
         $(".modal-title").text("Añadir nuevo curso a empleado");
         $("#btnInsertCourseEmployee").text("Añadir");
-        $("#formCoursesEmployee")[0].reset();
+        $("#status_curso").css('display','none');
+        $("#label_status").css('display','none');
+        $("#id_empleado22").css('display','none');
+        $("#id_empleadoo").css('display','block');
+        // $("#formCoursesEmployee").reset();
+        $("#id_curso").val("0").trigger("chosen:updated")
+        $("#id_empleado").val("").trigger("chosen:updated")
     });
 
     $(".btnEdit").click(function () {
@@ -25,9 +36,10 @@ $(document).ready(function () {
             "functions.php",
             obj,
             function (res) {
-                $("#id_empleado").val(res.id_empleado);
+                $(".status_curso").val(res.status_curso);
+                $("#id_empleado2").val(res.id_empleado);
                 $("#id_curso").val(res.id_curso);
-                $("#id_empleado").trigger("chosen:updated");
+                $("#id_empleado2").trigger("chosen:updated");
                 $("#id_curso").trigger("chosen:updated");
                 obj = {
                     action: "updateCourseEmployee",
@@ -38,6 +50,11 @@ $(document).ready(function () {
         );
         $(".modal-title").text("Editar");
         $("#btnInsertCourseEmployee").text("Editar");
+        $("#status_curso").css('display','block');
+        $("#label_status").css('display','block');
+        $("#id_empleadoo").css('display','none');
+        $("#id_empleado22").css('display','block');
+        $("#formCoursesEmployee")[0].reset();
     });
 
     $(".btnDelete").click(function () {
@@ -101,7 +118,7 @@ $(document).ready(function () {
                                 icon: "error",
                                 title: "Error...",
                                 text:
-                                    "El curso que estas tratando de añadir ya ah sido asignado al empleado",
+                                    "El curso que estas tratando de añadir ya ha sido asignado al empleado",
                             });
                         } else if (res.status == 1) {
                             Swal.fire({

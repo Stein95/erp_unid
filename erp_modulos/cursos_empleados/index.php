@@ -77,19 +77,28 @@ if (isset($id_usr)) {
                                                         <th>#</th>
                                                         <th>Empleado</th>
                                                         <th>Curso</th>
+                                                        <th>Status</th>
                                                         <?php
                                                         //Si el id del modulo se encuentra en el array de permisos editar o eliminar muestra el th
-                                                        if (in_array($idModuloCursosEmpleados[0], $_SESSION["editar"]) || in_array($idModuloCursosEmpleados[0], $_SESSION["eliminar"])) :
+                                                        $consultaStatus = $db->select("cursos_empleados", "*");
+                                                        $existeStatusTer = 0;
+                                                        foreach ($consultaStatus as $status) {
+                                                            if ($status['status_curso'] == "Terminado") {
+                                                                $existeStatusTer += 1;
+                                                            }
+                                                        }
+                                                        if (in_array($idModuloCursosEmpleados[0], $_SESSION["editar"]) || in_array($idModuloCursosEmpleados[0], $_SESSION["eliminar"])  || $existeStatusTer > 0) :
                                                         ?>
                                                             <th>Acciones</th>
                                                         <?php
                                                         endif;
+
                                                         ?>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <?php
-                                                    $coursesEmployee = $db->query("SELECT cursos.nombre_curso AS curso, cursos_empleados.id AS id, CONCAT(empleados_rh.name,' ',empleados_rh.lastname) AS empleado
+                                                    $coursesEmployee = $db->query("SELECT cursos.nombre_curso AS curso, cursos_empleados.id AS id, cursos_empleados.status_curso AS status, CONCAT(empleados_rh.name,' ',empleados_rh.lastname) AS empleado
                                                                                     FROM cursos
                                                                                     INNER JOIN
                                                                                     cursos_empleados
@@ -108,9 +117,10 @@ if (isset($id_usr)) {
                                                             <th scope="row"><?php echo $number; ?></th>
                                                             <td><?php echo utf8_encode(ucfirst($courseEmployee['empleado'])) ?></td>
                                                             <td><?php echo utf8_encode(ucfirst($courseEmployee['curso'])) ?></td>
+                                                            <td><?php echo $courseEmployee['status']; ?> </td>
                                                             <?php
                                                             //Si el id del modulo está en el array de permisos editar y eliminar muestra el td
-                                                            if (in_array($idModuloCursosEmpleados[0], $_SESSION["editar"]) || in_array($idModuloCursosEmpleados[0], $_SESSION["eliminar"])) :
+                                                            if (in_array($idModuloCursosEmpleados[0], $_SESSION["editar"]) || in_array($idModuloCursosEmpleados[0], $_SESSION["eliminar"]) || $existeStatusTer > 0) :
                                                             ?>
                                                                 <td>
                                                                     <?php
@@ -129,6 +139,17 @@ if (isset($id_usr)) {
                                                                         <button class="btnDelete mr-2 btn btn-outline-danger" data="<?php echo $courseEmployee['id'] ?>">
                                                                             Eliminar
                                                                         </button>
+                                                                    <?php
+                                                                    endif;
+
+                                                                    //Si el status del empleado es == Terminado muestra el btn Obtener Diploma
+                                                                    if ($courseEmployee['status'] == "Terminado") :
+                                                                    ?>
+                                                                        <form action="certificado.php" method="POST">
+                                                                            <input type="submit" value="Diploma" class="btnDiploma mr-2 btn btn-outline-warning" id="btnDiploma" style="margin-top: 4px;"></input>
+                                                                            <input type="hidden" name="empleado" value="<?php echo $courseEmployee['empleado']; ?>">
+                                                                            <input type="hidden" name="curso" value="<?php echo $courseEmployee['curso']; ?>">
+                                                                        </form>
                                                                     <?php
                                                                     endif;
                                                                     ?>
@@ -164,7 +185,7 @@ if (isset($id_usr)) {
 
         </html>
 
-        <!-- Modal CuoursesEmployee -->
+        <!-- Modal CoursesEmployee -->
         <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -176,25 +197,48 @@ if (isset($id_usr)) {
                     </div>
                     <div class="modal-body">
                         <form id="formCoursesEmployee">
-                            <div class="form-row">
-                                <div class="col-md-12 mb-3">
-                                    <select name="id_empleado" id="id_empleado" class="chosen-select form-control">
-                                        <option value="0">Selecciona un usuario</option>
-                                        <?php
-                                        $employees = $db->query("SELECT CONCAT(empleados_rh.name,' ',empleados_rh.lastname) AS empleado, id FROM empleados_rh")->fetchAll();
-                                        foreach ($employees as $employee) {
-                                        ?>
-                                            <option value="<?php echo $employee['id'] ?>">
-                                                <?php echo utf8_encode(ucfirst($employee["empleado"])) ?>
-                                            </option>
-                                        <?php
-                                        }
-                                        ?>
-                                    </select>
+                            <div class="id_empleadoo" id="id_empleadoo">
+                                <div class="form-row">
+                                    <div class="col-md-12 mb-3">
+                                        <label for="id_empleado">Empleado(s)</label>
+                                        <select name="id_empleado" id="id_empleado" multiple class="chosen-select form-control" data-placeholder="Selecciona Empleado(s)">
+                                            <?php
+                                            $employees = $db->query("SELECT CONCAT(empleados_rh.name,' ',empleados_rh.lastname) AS empleado, id FROM empleados_rh")->fetchAll();
+                                            foreach ($employees as $employee) {
+                                            ?>
+                                                <option value="<?php echo $employee['id'] ?>">
+                                                    <?php echo utf8_encode(ucfirst($employee["empleado"])) ?>
+                                                </option>
+                                            <?php
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="id_empleado22" id="id_empleado22">
+                                <div class="form-row">
+                                    <div class="col-md-12 mb-3">
+                                        <label for="id_empleado2">Empleado</label>
+                                        <select name="id_empleado2" id="id_empleado2" class="chosen-select form-control" data-placeholder="Empleado">
+                                            <option value="0">Selecciona un Empleado</option>
+                                            <?php
+                                            $employees = $db->query("SELECT CONCAT(empleados_rh.name,' ',empleados_rh.lastname) AS empleado, id FROM empleados_rh")->fetchAll();
+                                            foreach ($employees as $employee) {
+                                            ?>
+                                                <option value="<?php echo $employee['id'] ?>">
+                                                    <?php echo utf8_encode(ucfirst($employee["empleado"])) ?>
+                                                </option>
+                                            <?php
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="col-md-12 mb-3">
+                                    <label for="id_curso">Curso</label>
                                     <select name="id_curso" id="id_curso" class="chosen-select form-control">
                                         <option value="0">Selecciona un curso</option>
                                         <?php
@@ -207,6 +251,29 @@ if (isset($id_usr)) {
                                         <?php
                                         }
                                         ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- Select Status -->
+                            <div class="form-row">
+                                <div class="col-md-12 mb-3">
+                                    <label for="status_curso" id="label_status">Status</label>
+                                    <select name="status_curso" id="status_curso" class="status_curso form-control hidden">
+                                        <option value="0">
+                                            Selecciona un Status
+                                        </option>
+                                        <option value="Nuevo">
+                                            Nuevo
+                                        </option>
+                                        <option value="Pendiente">
+                                            Pendiente
+                                        </option>
+                                        <option value="En proceso">
+                                            En proceso
+                                        </option>
+                                        <option value="Terminado">
+                                            Terminado
+                                        </option>
                                     </select>
                                 </div>
                             </div>
