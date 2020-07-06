@@ -1,7 +1,9 @@
 <?php
 include("funciones/db.php");
 
-$horarios ="SELECT h1.name, h1.lastname, h2.positionName, 
+$empleados ="SELECT * FROM empleados_rh";
+
+$horarios ="SELECT h1.id, h1.name, h1.lastname, h2.positionName, 
 h3.sundayFrom, h3.sundayTo, h3.sundaySecondTurnFrom, h3.sundaySecondTurnTo, h3.sundayThirdTurnFrom, h3.sundayThirdTurnTo,
 h3.mondayFrom, h3.mondayTo, h3.mondaySecondTurnFrom, h3.mondaySecondTurnTo, h3.mondayThirdTurnFrom, h3.mondayThirdTurnTo,
 h3.tuesdayFrom, h3.tuesdayTo, h3.tuesdaySecondTurnFrom, h3.tuesdaySecondTurnTo, h3.tuesdayThirdTurnFrom, h3.tuesdayThirdTurnTo,
@@ -9,7 +11,7 @@ h3.wednesdayFrom, h3.wednesdayTo, h3.wednesdaySecondTurnFrom, h3.wednesdaySecond
 h3.thursdayFrom, h3.thursdayTo, h3.thursdaySecondTurnFrom, h3.thursdaySecondTurnTo, h3.thursdayThirdTurnFrom, h3.thursdayThirdTurnTo,
 h3.fridayFrom, h3.fridayTo, h3.fridaySecondTurnFrom, h3.fridaySecondTurnTo, h3.fridayThirdTurnFrom, h3.fridayThirdTurnTo,
 h3.saturdayFrom, h3.saturdayTo, h3.saturdaySecondTurnFrom, h3.saturdaySecondTurnTo, h3.saturdayThirdTurnFrom, h3.saturdayThirdTurnTo
-FROM empleados_rh h1 INNER JOIN puestos_empleados_rh h2 on h1.department = h2.id INNER JOIN horarios_puestos_rh h3";
+FROM empleados_rh h1 INNER JOIN puestos_empleados_rh h2 ON h1.department = h2.id INNER JOIN horarios_puestos_rh h3 ON h3.positionId = h2.id ";
 ?>
 
 <!doctype html>
@@ -26,6 +28,7 @@ FROM empleados_rh h1 INNER JOIN puestos_empleados_rh h2 on h1.department = h2.id
     <meta name="msapplication-tap-highlight" content="no">
     <link href="./main.css" rel="stylesheet">
     <link rel="stylesheet" href="producto.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
 </head>
 <script type="text/javascript">
     function confirmar() {
@@ -66,6 +69,7 @@ FROM empleados_rh h1 INNER JOIN puestos_empleados_rh h2 on h1.department = h2.id
 
 
                     while ($row = mysqli_fetch_assoc($resultado)) { ?>
+
                         <div class="container">
                             <div class="col-lg-12">
                                 <div class="main-card mb-3 card">
@@ -73,60 +77,67 @@ FROM empleados_rh h1 INNER JOIN puestos_empleados_rh h2 on h1.department = h2.id
                                         <div class="table-responsive">
                                             <div class="horario">
                                                
-                                                <div class="contenedorH">
+                                                <div class="contenedorH" id>
                                                     
                                                     <h3>Usuario</h3>
-                                                    <h5><?php echo utf8_encode($row["name"].' '.$row["lastname"]) ?></h5>
+                                                    <select name="usuario" id="usuario">
+                                                    <?php $listemple = mysqli_query($conectar, $empleados);
+                                                    while ($lemp = mysqli_fetch_assoc($listemple)) { ?>
+                                                        <option value="<?php echo $lemp["id"]; ?> "><?php echo utf8_encode($lemp["name"].' '.$lemp["lastname"]); ?></option>
+                                                        <?php } mysqli_free_result($listemple); ?>
+
+                                                    </select>
+                                                    
                                                     <h3>Puesto</h3>
-                                                    <h5><?php echo utf8_encode($row["positionName"]) ?></h5>
+                                                    <h5><?php echo utf8_encode($row["positionName"]); ?></h5>
                                                     <h3>Dias y Horas</h3>
                                                     <div>
                                                     <h3>Domingo</h3>
-                                                    <h5><?php echo $row["sundayFrom"].' ------ '.$row["sundayTo"] ?></h5>
-                                                    <h5><?php echo $row["sundaySecondTurnFrom"].' ------ '.$row["sundaySecondTurnTo"] ?></h5>
-                                                    <h5><?php echo $row["sundayThirdTurnFrom"].' ------ '.$row["sundayThirdTurnTo"] ?></h5>                                                  
+                                                    <h5><?php echo $row["sundayFrom"].' ------ '.$row["sundayTo"]; ?></h5>
+                                                    <h5><?php echo $row["sundaySecondTurnFrom"].' ------ '.$row["sundaySecondTurnTo"]; ?></h5>
+                                                    <h5><?php echo $row["sundayThirdTurnFrom"].' ------ '.$row["sundayThirdTurnTo"]; ?></h5>                                                  
                                                     </div>
 
                                                     <div>
                                                     <h3>Lunes</h3>
-                                                    <h5><?php echo $row["mondayFrom"].' ------ '.$row["mondayTo"] ?></h5>
-                                                    <h5><?php echo $row["mondaySecondTurnFrom"].' ------ '.$row["mondaySecondTurnTo"] ?></h5>
-                                                    <h5><?php echo $row["mondayThirdTurnFrom"].' ------ '.$row["mondayThirdTurnTo"] ?></h5>                                                  
+                                                    <h5><?php echo $row["mondayFrom"].' ------ '.$row["mondayTo"]; ?></h5>
+                                                    <h5><?php echo $row["mondaySecondTurnFrom"].' ------ '.$row["mondaySecondTurnTo"]; ?></h5>
+                                                    <h5><?php echo $row["mondayThirdTurnFrom"].' ------ '.$row["mondayThirdTurnTo"]; ?></h5>                                                  
                                                     </div>
 
                                                     <div>
                                                     <h3>Martes</h3>
-                                                    <h5><?php echo $row["tuesdayFrom"].' ------ '.$row["tuesdayTo"] ?></h5>
-                                                    <h5><?php echo $row["tuesdaySecondTurnFrom"].' ------ '.$row["tuesdaySecondTurnTo"] ?></h5>
+                                                    <h5><?php echo $row["tuesdayFrom"].' ------ '.$row["tuesdayTo"]; ?></h5>
+                                                    <h5><?php echo $row["tuesdaySecondTurnFrom"].' ------ '.$row["tuesdaySecondTurnTo"]; ?></h5>
                                                     <h5><?php echo $row["tuesdayThirdTurnFrom"].' ------ '.$row["tuesdayThirdTurnTo"] ?></h5>                                                  
                                                     </div>
 
                                                     <div>
                                                     <h3>Miercoles</h3>
-                                                    <h5><?php echo $row["wednesdayFrom"].' ------ '.$row["wednesdayTo"] ?></h5>
-                                                    <h5><?php echo $row["wednesdaySecondTurnFrom"].' ------ '.$row["wednesdaySecondTurnTo"] ?></h5>
-                                                    <h5><?php echo $row["wednesdayThirdTurnFrom"].' ------ '.$row["wednesdayThirdTurnTo"] ?></h5>                                                  
+                                                    <h5><?php echo $row["wednesdayFrom"].' ------ '.$row["wednesdayTo"]; ?></h5>
+                                                    <h5><?php echo $row["wednesdaySecondTurnFrom"].' ------ '.$row["wednesdaySecondTurnTo"]; ?></h5>
+                                                    <h5><?php echo $row["wednesdayThirdTurnFrom"].' ------ '.$row["wednesdayThirdTurnTo"]; ?></h5>                                                  
                                                     </div>
 
                                                     <div>
                                                     <h3>Jueves</h3>
-                                                    <h5><?php echo $row["thursdayFrom"].' ------ '.$row["thursdayTo"] ?></h5>
-                                                    <h5><?php echo $row["thursdaySecondTurnFrom"].' ------ '.$row["thursdaySecondTurnTo"] ?></h5>
-                                                    <h5><?php echo $row["thursdayThirdTurnFrom"].' ------ '.$row["thursdayThirdTurnTo"] ?></h5>                                                  
+                                                    <h5><?php echo $row["thursdayFrom"].' ------ '.$row["thursdayTo"]; ?></h5>
+                                                    <h5><?php echo $row["thursdaySecondTurnFrom"].' ------ '.$row["thursdaySecondTurnTo"]; ?></h5>
+                                                    <h5><?php echo $row["thursdayThirdTurnFrom"].' ------ '.$row["thursdayThirdTurnTo"]; ?></h5>                                                  
                                                     </div>
 
                                                     <div>
                                                     <h3>Viernes</h3>
-                                                    <h5><?php echo $row["fridayFrom"].' ------ '.$row["fridayTo"] ?></h5>
-                                                    <h5><?php echo $row["fridaySecondTurnFrom"].' ------ '.$row["fridaySecondTurnTo"] ?></h5>
-                                                    <h5><?php echo $row["fridayThirdTurnFrom"].' ------ '.$row["fridayThirdTurnTo"] ?></h5>                                                  
+                                                    <h5><?php echo $row["fridayFrom"].' ------ '.$row["fridayTo"]; ?></h5>
+                                                    <h5><?php echo $row["fridaySecondTurnFrom"].' ------ '.$row["fridaySecondTurnTo"]; ?></h5>
+                                                    <h5><?php echo $row["fridayThirdTurnFrom"].' ------ '.$row["fridayThirdTurnTo"]; ?></h5>                                                  
                                                     </div>
 
                                                     <div>
                                                     <h3>Sabado</h3>
-                                                    <h5><?php echo $row["saturdayFrom"].' ------ '.$row["saturdayTo"] ?></h5>
-                                                    <h5><?php echo $row["saturdaySecondTurnFrom"].' ------ '.$row["saturdaySecondTurnTo"] ?></h5>
-                                                    <h5><?php echo $row["saturdayThirdTurnFrom"].' ------ '.$row["saturdayThirdTurnTo"] ?></h5>                                                  
+                                                    <h5><?php echo $row["saturdayFrom"].' ------ '.$row["saturdayTo"]; ?></h5>
+                                                    <h5><?php echo $row["saturdaySecondTurnFrom"].' ------ '.$row["saturdaySecondTurnTo"]; ?></h5>
+                                                    <h5><?php echo $row["saturdayThirdTurnFrom"].' ------ '.$row["saturdayThirdTurnTo"]; ?></h5>                                                  
                                                     </div>
 
                                                     
@@ -150,7 +161,39 @@ FROM empleados_rh h1 INNER JOIN puestos_empleados_rh h2 on h1.department = h2.id
             </div>
         </div>
     
-    <script type="text/javascript" src="./assets/scripts/main.js"></script>
+    <script type="text/javascript" src="./assets/scripts/main.js">
+    </script>
 </body>
 
 </html>
+<script type="text/javascript">
+	$(document).ready(function(){
+
+		recargarLista();
+
+		$('#usuario').change(function(){
+			recargarLista();
+		});
+	})
+</script>
+<script type="text/javascript">
+    function recargarLista(){
+       // $(document).ready(function(){
+            //$("#usuario").on("change",function(){
+                //var usuarioId ={
+                    //"usuario" : $(this).val()
+               // };
+                $.ajax({
+                    data: "usuarioid="+$('#usuario').val(),
+                    url:'funciones/usuarioid.php'
+                    type: 'POST'
+                  
+                    success: function(response){
+                        console.log( response);
+                    }
+                });
+            //});
+        //});
+    }
+</script>
+
