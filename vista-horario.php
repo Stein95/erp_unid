@@ -1,7 +1,23 @@
 <?php
 include("funciones/db.php");
 
+isset($_GET['id']) ? $id_url = $_GET['id'] : $id_url = null ;
+
+
 $empleados ="SELECT * FROM empleados_rh";
+
+if($id_url){
+$horarios ="SELECT h1.id, h1.name, h1.lastname, h2.positionName, 
+h3.sundayFrom, h3.sundayTo, h3.sundaySecondTurnFrom, h3.sundaySecondTurnTo, h3.sundayThirdTurnFrom, h3.sundayThirdTurnTo,
+h3.mondayFrom, h3.mondayTo, h3.mondaySecondTurnFrom, h3.mondaySecondTurnTo, h3.mondayThirdTurnFrom, h3.mondayThirdTurnTo,
+h3.tuesdayFrom, h3.tuesdayTo, h3.tuesdaySecondTurnFrom, h3.tuesdaySecondTurnTo, h3.tuesdayThirdTurnFrom, h3.tuesdayThirdTurnTo,
+h3.wednesdayFrom, h3.wednesdayTo, h3.wednesdaySecondTurnFrom, h3.wednesdaySecondTurnTo, h3.wednesdayThirdTurnFrom, h3.wednesdayThirdTurnTo,
+h3.thursdayFrom, h3.thursdayTo, h3.thursdaySecondTurnFrom, h3.thursdaySecondTurnTo, h3.thursdayThirdTurnFrom, h3.thursdayThirdTurnTo,
+h3.fridayFrom, h3.fridayTo, h3.fridaySecondTurnFrom, h3.fridaySecondTurnTo, h3.fridayThirdTurnFrom, h3.fridayThirdTurnTo,
+h3.saturdayFrom, h3.saturdayTo, h3.saturdaySecondTurnFrom, h3.saturdaySecondTurnTo, h3.saturdayThirdTurnFrom, h3.saturdayThirdTurnTo
+FROM empleados_rh h1 INNER JOIN puestos_empleados_rh h2 ON h1.position = h2.id INNER JOIN horarios_puestos_rh h3 ON h3.positionId = h2.id WHERE h1.id = '$id_url' ";
+}
+else{
 
 $horarios ="SELECT h1.id, h1.name, h1.lastname, h2.positionName, 
 h3.sundayFrom, h3.sundayTo, h3.sundaySecondTurnFrom, h3.sundaySecondTurnTo, h3.sundayThirdTurnFrom, h3.sundayThirdTurnTo,
@@ -11,7 +27,9 @@ h3.wednesdayFrom, h3.wednesdayTo, h3.wednesdaySecondTurnFrom, h3.wednesdaySecond
 h3.thursdayFrom, h3.thursdayTo, h3.thursdaySecondTurnFrom, h3.thursdaySecondTurnTo, h3.thursdayThirdTurnFrom, h3.thursdayThirdTurnTo,
 h3.fridayFrom, h3.fridayTo, h3.fridaySecondTurnFrom, h3.fridaySecondTurnTo, h3.fridayThirdTurnFrom, h3.fridayThirdTurnTo,
 h3.saturdayFrom, h3.saturdayTo, h3.saturdaySecondTurnFrom, h3.saturdaySecondTurnTo, h3.saturdayThirdTurnFrom, h3.saturdayThirdTurnTo
-FROM empleados_rh h1 INNER JOIN puestos_empleados_rh h2 ON h1.department = h2.id INNER JOIN horarios_puestos_rh h3 ON h3.positionId = h2.id ";
+FROM empleados_rh h1 INNER JOIN puestos_empleados_rh h2 ON h1.position = h2.id INNER JOIN horarios_puestos_rh h3 ON h3.positionId = h2.id";
+
+}
 ?>
 
 <!doctype html>
@@ -65,9 +83,6 @@ FROM empleados_rh h1 INNER JOIN puestos_empleados_rh h2 ON h1.department = h2.id
                     </div>
 
                     <?php $resultado = mysqli_query($conectar, $horarios);
-
-
-
                     while ($row = mysqli_fetch_assoc($resultado)) { ?>
 
                         <div class="container">
@@ -80,13 +95,7 @@ FROM empleados_rh h1 INNER JOIN puestos_empleados_rh h2 ON h1.department = h2.id
                                                 <div class="contenedorH" id>
                                                     
                                                     <h3>Usuario</h3>
-                                                    <select name="usuario" id="usuario">
-                                                    <?php $listemple = mysqli_query($conectar, $empleados);
-                                                    while ($lemp = mysqli_fetch_assoc($listemple)) { ?>
-                                                        <option value="<?php echo $lemp["id"]; ?> "><?php echo utf8_encode($lemp["name"].' '.$lemp["lastname"]); ?></option>
-                                                        <?php } mysqli_free_result($listemple); ?>
-
-                                                    </select>
+                                                    <h2><?php echo utf8_encode($row["name"].' '.$row["lastname"]); ?></h2>
                                                     
                                                     <h3>Puesto</h3>
                                                     <h5><?php echo utf8_encode($row["positionName"]); ?></h5>
